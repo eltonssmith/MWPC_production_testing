@@ -1,0 +1,340 @@
+%             
+% Hall D Note
+% 
+\documentclass[12pt]{article}
+
+
+\usepackage{color}
+
+% ===    Set a true/false value for PDF hyper marks  
+
+\newif\ifhyprf
+%\hyprffalse   
+\hyprftrue
+
+\RequirePackage{ifpdf}
+  
+\ifpdf
+    \pdfoutput=1        % we are running PDFLaTeX
+    \pdftrue
+\else
+    \pdffalse           % we are not running PDFLaTeX
+\fi
+
+\ifpdf
+  \pdfcompresslevel=9
+  \usepackage[pdftex]{graphicx}
+%  \usepackage{thumbpdf}
+  \definecolor{rltred}{rgb}{0.75,0,0}
+  \definecolor{rltgreen}{rgb}{0,0.3,0}
+  \definecolor{rltblue}{rgb}{0,0,0.75}
+  \definecolor{rltdarkgreen}{rgb}{0.1,0.6,0.1}
+  \ifhyprf
+     \usepackage[pdftex,
+         colorlinks=true,
+         urlcolor=rltblue,       % \href{...}{...} external (URL)
+         filecolor=rltgreen,     % \href{...} local file
+         linkcolor=rltred,       % \ref{...} and \pageref{...}
+         citecolor=rltdarkgreen, % citations
+         pagebackref,
+         pdfpagemode=None,
+         pdftitle={Civil Reference Concepts for BDX},
+         pdfauthor={many},
+         pdfsubject={Civil Reference Concepts for BDX},
+         pdfkeywords={JLab Beam Dump Experiment}]{hyperref}
+  \fi
+  \usepackage{pdfcolmk}
+  \DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\else
+  \usepackage{graphicx}
+  \DeclareGraphicsExtensions{.eps,.epsi,.ps,.eps.gz,.epsi.gz,.ps.gz}
+\fi
+
+\setlength{\textwidth}{6.0in}
+%\setlength{\textheight}{9.5in}
+\setlength{\textheight}{8.75in}
+\setlength{\evensidemargin}{0.25in}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\topmargin}{-0.25in}
+\setlength{\footskip}{0.25in}
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0in}
+\usepackage{graphicx,lscape,rotating}
+\pagenumbering{arabic}
+%\input epsf
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\begin{flushright}
+GlueX-doc-3857\\
+SVN: /docs/GlueXdoc/CalEff\\
+January 8, 2019
+\end{flushright}
+
+
+
+%\pagestyle{myheadings}
+%\markright{BDX-NOTE-2015-002}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+{\Large \bf Toy MC Study of Photon Reconstruction \\ 
+Efficiency using $\cos{\theta}$ Method}\\*[0.5cm]
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  AUTHORS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\begin{center}   
+{\sc  E.S. Smith}\\  
+\end{center}
+
+%\tableofcontents
+
+\section{Introduction}
+The Calorimeter Working Group was tasked at the last collaboration meeting with determining preliminary photon detection efficiencies in the calorimeters and demonstrate agreement between data 
+and Monte Carlo (MC). 
+As part of this effort, our Chinese collaborators from IHEP have investigated the photon detection efficiencies in both BCAL and FCAL \cite{hdnote3844} using a method that has been successfully 
+used previously in similar studies of the BESIII calorimeters. This ``$\cos{\theta}$ method'' relies on the fact that the $\pi^0\rightarrow \gamma \gamma$ decays isotropically in its rest frame, a fact that can be used 
+with some assumptions to determine relative detection efficiencies of the decay photons as a function of their lab energy. The basis for this method is detailed in Appendix\,\ref{app:derivation}, but we provide
+the essentials here.
+
+The main result (Eq.\,\ref{eq:main}) relates the angle of one photon in the $\pi^0$ rest frame to energy variables in the lab:
+\begin{eqnarray}
+\cos{\theta^*_1} & = & \left( {E_1 - E_2  \over P } \right),     \label{eq:main2}
+\end{eqnarray}
+where $E_1$ and $E_2$ are the energies of the two photons and $P$ is the momentum of the $\pi^0$ in the lab frame. It is assumed that data are collected at a fixed $\pi^0$ momentum. 
+The angle $\theta^*$ (we drop the subscript) is the angle of photon 1 in the $\pi^0$ rest frame. Thus the 
+angular distributions of the photons in the $\pi^0$ rest frame is related to their photon energy distributions in the lab. The $\cos{\theta}$ method attributes any deviations of the 
+measured $\cos{\theta^*}$ distribution from uniformity to the detection efficiency of the daughter photons. It makes the further assumption that the efficiency loss is due to the lower energy photon, which
+we arbitrarily pick to be photon 2 with energy $E_2$. Photon 1, with the higher energy of the two, is assumed to be detected with 100\% efficiency.  With this assumption, the relative efficiency of detecting
+photon 2 is determined as a function of its energy compared to the efficiency at other energies. The absolute efficiency can be obtained if the efficiency is known at any specific energy, or assumed to be
+100\% at the highest measured energy.
+
+\section{Toy Monte Carlo}
+In order to investigate the effect of thresholds and resolution on the efficiency determination using this method, we have written a simple toy Monte Carlo (MC). This study cannot replace a realistic simulation
+and analysis based on $hdgeant$ or $hdgeant4$, but can provide guidance and intuition as to what may be expected. We proceed as follows: 100000 $\pi^0$'s are generated 
+with an average lab energy $\overline{E}$ distributed uniformly over the interval $\Delta E$, where $\Delta E$ is typically $\pm 2 \sigma$ and $\sigma$ is the energy resolution. We denote the corresponding
+average $\pi^0$ momentum by $\overline{P} = \sqrt{\overline{E}^2 - m^2}$. The $\pi^0$'s are then 
+decayed with a  uniform distribution in $\cos{\theta^*}$  and $\phi^*$\footnote{The azimuthal dependence is trivial, as no detector geometry is included here that would break this symmetry.} in the $\pi^0$ rest frame.
+The 4-momentum vectors of the photons are boosted to the lab frame along the direction of the $\pi^0$ (assumed to be moving with a fixed momentum along the z-direction). The photon
+energies are smeared according to the following formula:
+\begin{eqnarray}
+\sigma(E_\gamma) & = & E_\gamma\, \sqrt{\frac{a^2}{E_\gamma} + b ^2}.
+\end{eqnarray}
+The nominal values for the parameters for the BCAL calorimeter are $a=0.052$\,GeV$^{1/2}$ and $b=0.036$ \cite{BEATTIE201824}. Photons with energies less than a threshold energy 
+($E_{thresh} \sim 0.05$\,GeV) were discarded. The photon with the smallest smeared energy is designated as photon 2. Then the angle in the $\pi^0$ rest frame is determined
+in order to plot the $\cos{\theta^*}$ distribution, which should be flat. The value of $\cos{\theta}^*$ may be computed in two ways  (see Eq.\,\ref{eq:main2} and Eq.\,\ref{eq:option2}):
+\begin{eqnarray}
+\cos{\theta^{*A}} & = & \left( {\overline{E} - 2E_2 \over \overline{P}} \right) \label{eq:optionA} \\
+\cos{\theta^{*B}} & = & \left( {E_1 - E_2} \over \sqrt{ (E_1+E_2)^2 - m^2} \right) \label{eq:optionB}
+\end{eqnarray}
+In these equations, $E_1$ and $E_2$ are the smeared energies of the two photons.
+In the limit of perfect resolution and when $\Delta E$ is infinitely small, these two expressions are identical. Experimentally they differ and one may study which results in the most accurate measurement.  In this 
+toy MC, we take $\overline{E}$ to be the average of the bin used to generate the $\pi^0$ energy, but in practice this value could also be taken from other information available. For example, if one selects
+$\pi^0$'s using the exclusive reaction $\gamma p \rightarrow \omega p$, with $\omega \rightarrow \pi^+\pi^-\pi^0$, the energy of the $\pi^0$ may be determined by a kinematic fit to the entire reaction. We note
+that $\cos{\theta^{*B}}$ has the property that it falls between 0 and 1, despite the measurement resolution of the photon energies.
+
+Deviations from a uniform $\cos{\theta^*}$ distribution can be interpreted as an inefficiency in detecting photon 2 as a function of $E_2$ by inverting Eq.\,\ref{eq:main2}.  However, the  inversion
+requires knowledge of the $\pi^0$ momentum, which is the reason the analysis must be conducted for fixed momentum:
+\begin{eqnarray}
+E_2 & = & \frac{1}{2}(\overline{E} - \overline{P}\,\cos{\theta^*}).
+\end{eqnarray}
+This efficiency assignment is only valid when evaluating the $\cos{\theta^*}$ distribution for a fixed $\pi^0$ energy.
+
+\section{Simulations}
+Typical distributions generated by the toy MC are shown in Figs.\,\ref{fig:AnglesCMLab_palab_1000_50_52_36_255_p2}--\ref{fig:AnglesCMLab_energy_1000_50_52_36_509_p3} 
+for the two options for computing $\cos{\theta^*}$. Plots of the extracted efficiencies can be found in Fig.\,\ref{fig:AnglesCMLab_p4}. In order to determine the efficiencies, it is assumed that
+the bin in the $\cos{\theta^*}$ plot with the maximum number of entries corresponds to 100\% efficiency. 
+Qualitatively, the efficiencies are consistent with one another. The main differences show up near for option ``A" $\cos{\theta^{*A}} \sim$ 0, i.e. where the two photons have energies equal to each other
+and about half the $\pi^0$ energy.   Under our working assumption that the inefficiencies are largest at
+low energy where $\cos{\theta^*} \sim$ 1, it is here that the $\cos{\theta^*}$ resolution is best. Therefore, this method has the advantage that the calorimeter energy resolution does not 
+significantly degrade the efficiency measurement where it is most important.
+
+As a test of the method, we have added an efficiency function to the photon ``detection"  as was done in Ref.\,\cite{hdnote3844}.  The threshold cut is left as before.
+The extracted efficiency is plotted in  Fig.\,\ref{fig:AnglesCMLab_eff_p4}, which we have divided by 0.96 to normalize the plateau value to 100\%. The agreement between the extraction and 
+input function demonstrates consistency of the method.
+
+
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=2,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_palab_1000_50_52_36_255}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.25 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*A}}$ computed with Eq.\,\ref{eq:optionA}.
+\label{fig:AnglesCMLab_palab_1000_50_52_36_255_p2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=3,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_palab_1000_50_52_36_255}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.25 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*A}}$ computed with Eq.\,\ref{eq:optionA}.
+\label{fig:AnglesCMLab_palab_1000_50_52_36_255_p3}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=2,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_energy_1000_50_52_36_255}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.25 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*B}}$ computed with Eq.\,\ref{eq:optionB}.
+\label{fig:AnglesCMLab_energy_1000_50_52_36_255_p2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=3,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_energy_1000_50_52_36_255}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.25 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*B}}$ computed with Eq.\,\ref{eq:optionB}.
+\label{fig:AnglesCMLab_energy_1000_50_52_36_255_p3}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=2,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_palab_1000_50_52_36_509}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.25 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*A}}$ computed with Eq.\,\ref{eq:optionA}.
+\label{fig:AnglesCMLab_palab_1000_50_52_36_509_p2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=3,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_palab_1000_50_52_36_509}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.509 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*A}}$ computed with Eq.\,\ref{eq:optionA}.
+\label{fig:AnglesCMLab_palab_1000_50_52_36_509_p3}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=2,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_energy_1000_50_52_36_509}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.509 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*B}}$ computed with Eq.\,\ref{eq:optionB}.
+\label{fig:AnglesCMLab_energy_1000_50_52_36_509_p2}}
+\end{center}
+\end{figure}
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=3,height=16cm,viewport=0 0 600 560,clip=true]{AnglesCMLab_energy_1000_50_52_36_509}
+\caption{Various distributions for $P$= 1 GeV, $\Delta E$=0.509 GeV, nominal threshold and resolution parameters and the $\cos{\theta^{*B}}$ computed with Eq.\,\ref{eq:optionB}.
+\label{fig:AnglesCMLab_energy_1000_50_52_36_509_p3}}
+\end{center}
+\end{figure}
+
+% \newpage
+
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=4,height=6cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_palab_1000_50_52_36_255}
+\includegraphics[page=4,height=6cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_energy_1000_50_52_36_255}
+\includegraphics[page=4,height=6cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_palab_2000_50_52_36_412}
+\includegraphics[page=4,height=6cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_energy_2000_50_52_36_412}
+\includegraphics[page=4,height=6cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_palab_1000_50_52_36_509}
+\includegraphics[page=4,height=6cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_energy_1000_50_52_36_509}
+\caption{Efficiencies calculated under various conditions as specified at the top of each plot. All parameters are in units of GeV. The left column uses $\cos{\theta^{*A}}$ computed with Eq.\,\ref{eq:optionA} 
+and the right column uses  $\cos{\theta^{*B}}$ computed with Eq.\,\ref{eq:optionB}. Top plots) $P$= 1 GeV, $\Delta E$=0.255 GeV, Middle plots) $P$= 2 GeV, $\Delta E$=0.412 GeV, and
+Bottom plots) $P$= 1 GeV, $\Delta E$=0.509 GeV.
+\label{fig:AnglesCMLab_p4}}
+\end{center}
+\end{figure}  
+
+
+\section{Conclusions}
+ We can draw some qualitative conclusions:
+ \begin{itemize}
+ \item The smearing of the threshold ($E_{thresh}$=0.05 GeV in the plots) is on the order of one bin or about 10 MeV. This is true for the various conditions studied, perhaps degrading to about 20 MeV when the
+ $\pi^0$ energy window is widened to 0.5 GeV for $P$=1 GeV and using $\cos{\theta^{*B}}$. 
+ \item Due to fluctuations, by normalizing the efficiency to the maximum bin in the $\cos{\theta^*}$ plot, we find that the typical assigned efficiency in the plateau is about 96\%, 
+ below the input of 100\%, but this is due simply to the finite number of events thrown.
+ \item When using $\cos{\theta^{*B}}$ to determine $\cos{\theta^*}$, we find that the smearing at the higher energies almost disappears. The smearing of the energies seems to cancel out  in the ratio.
+ \end{itemize}  
+   
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=4,height=8cm,viewport=0 0 500 400,clip=true]{AnglesCMLab_eff_energy_2000_50_52_36_412}
+\caption{The efficiency function (plotted) on top of the extracted efficiency divided by 0.96 to normalize plateau to 100\%.  There is also a threshold cut of 0.05 GeV.
+This is a test of the method using the same efficiency function used as a test in Ref.\,\cite{hdnote3844}.
+The efficiency was calculated using  $\cos{\theta^{*B}}$ (Eq.\,\ref{eq:optionB}). 
+\label{fig:AnglesCMLab_eff_p4}}
+\end{center}
+\end{figure}     
+   
+ 
+%\nocite{*}
+\bibliographystyle{unsrt}                                                                              
+\bibliography{MWPC_production_testing}    
+
+\clearpage
+\newpage
+\appendix
+\section{Derivation of method  \label{app:derivation}}
+Because $\pi^0$'s are spinless, the decay distribution in their rest frame is isotropic. This fact may be used to determine relative detection efficiencies of photons in the lab as a function of their laboratory 
+energies. The key to this method lies in establishing the kinematic relationship between the decay angle in the rest frame ($\theta^*$) and the photon energies in the laboratory frame ($E_1$ and $E_{2}$). 
+A schematic of the $\pi^0$ decay is shown in Fig.\,\ref{fig:Vectors}. The momentum of the $\pi^0$ in the laboratory is denoted by $P$, its energy by $E$, and the laboratory angle of photon 1 and the 
+direction of the $\pi^0$ is given by $\theta$. The velocity of the $\pi^0$ is given by $\beta = P/E$ and $\gamma = E/m$, where $m=m_{\pi^0}$ is its mass ($m^2 = E^2 - P^2$).
+
+ \begin{figure}[tbh]
+\begin{center}   
+\includegraphics[width=6cm,clip=true]{Vectors.png} 
+\includegraphics[width=6cm,clip=true]{Vectors2.png}     
+\caption{Sketch of $\pi^0 \rightarrow \gamma \gamma$.
+\label{fig:Vectors}
+}
+\end{center}  
+\end{figure}
+
+The relationship between the momenta of the pion and its decay products may be expressed as 
+\begin{eqnarray}
+P^2 - 2PE_1 \cos{\theta} + E_1^2 & = & E_2^2,     \label{eq:momentum}
+\end{eqnarray}
+where we make use of the fact that the magnitude of the photon's momenta are equal to their energy. The energies are related by
+\begin{eqnarray}
+E & = & E_1 + E_2           \label{eq:energy}
+\end{eqnarray}
+The solution to Eqs.\,\ref{eq:momentum} and \ref{eq:energy} is given by:
+\begin{eqnarray}
+E_1 & = & {m^2 \over 2E}  \left(1 \over 1 - \beta \cos{\theta} \right) \\
+E_2 & = & E - {m^2 \over 2E}  \left(1 \over 1 - \beta \cos{\theta} \right),
+\end{eqnarray}
+from which one may derive the difference between the two energies as
+\begin{eqnarray}
+E_2 - E_1 & = & P \left(\beta -\cos{\theta} \over 1 - \beta \cos{\theta} \right)    \label{eq:Ediff}
+\end{eqnarray}
+We now consider the transformation of the angle in the laboratory frame to the rest frame of the pion. Taking  the direction of the pion along the z axis, the transformation of the photon to the pion rest frame 
+(denoted by variables with ``*'') is given by
+\begin{eqnarray} 
+P^{\gamma*}_{z} & = & \gamma (P^\gamma_z - \beta E^\gamma) = \gamma E^\gamma (\cos{\theta} - \beta )  \\
+E^{\gamma*} & = & \gamma (E^\gamma - \beta P^\gamma_z) = \gamma E^\gamma (1 - \beta\cos{\theta} )  \\
+\cos{\theta^*_1} & = & { P^{\gamma*}_{z}  \over P^{\gamma*}} = { P^{\gamma*}_{z}  \over E^{\gamma*} } = \left( \cos{\theta} - \beta \over 1 - \beta \cos{\theta}  \right) \\
+\cos{\theta^*_2} & = & \cos(\pi - \theta^*_1) = - \cos{\theta^*_1} = \left(\beta -\cos{\theta} \over 1 - \beta \cos{\theta} \right)
+\end{eqnarray}
+Inserting this expression into Eq.\,\ref{eq:Ediff}, we obtain our main result:
+\begin{eqnarray}
+E_2 - E_1 & = & P \, \cos{\theta^*_2}.    \label{eq:main}
+\end{eqnarray}
+Using Eq.\,\ref{eq:energy} one may rewrite this expression as
+\begin{eqnarray}
+E_2 & = \frac{1}{2}(E + P\,\cos{\theta^*_2}) = \frac{1}{2}(E - P\,\cos{\theta^*_1})   \label{eq:option2}
+\end{eqnarray}
+
+
+It is interesting to plot the relationship between $\theta^*$ in the $\pi^0$ rest frame and the lab. This is shown in Fig.\,\,\ref{fig:AnglesCMLab_palab_2000_50_52_36_255}
+\begin{figure}[tbph]
+\begin{center}
+\includegraphics[page=1,height=8cm,viewport=30 0 600 400,clip=true]{AnglesCMLab_palab_2000_50_52_36_412}
+\caption{Angle $\theta^*$  in the $\pi^0$ rest frame as a function of its corresponding lab angle $\theta$ for different values of the $\pi^0$ velocity. The $\pi^0$ velocity is approximately 
+$\beta=$0.99 ($P$=1\,GeV) and
+$\beta=$0.998 ($P$=2\,GeV). Most of the angles in the lab are compressed forward for typical $\pi^0$ momenta.
+\label{fig:AnglesCMLab_palab_2000_50_52_36_255}}
+\end{center}
+\end{figure}
+
+
+\clearpage
+\newpage
+\end{document}
+
+
+
+
+
+
