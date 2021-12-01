@@ -34,17 +34,21 @@ TEX_FILES_0 = MWPC_production_testing
 
 TEX_FILES = $(addsuffix .tex,$(TEX_FILES_0)) # add .tex suffix
 
-PNG_FILES_0 =
+PNG_FILES_0 = Ineff_track Ineff_5-6 EEL126_test_elevation EEL126_test_plan Current_draw_Frodo Waveform_Denethor_R184 \
+              Scintillator_correlation MWPC_distributions MWPC_scint_correlation Rint_to_peak Arwen_R188_sum_nhits \
+              Arwen_R188_eff Bilbo_R166_eff Celeborn_R169_eff Denethor_R184_eff Eowyn_R171_eff Frodo_R175_Th600_eff \
+              Galadriel_R157_Th500_eff Haldor_R159_eff Denethor_R182_HV1690_Th200_eff Denethor_R180_HV1815_Th200_eff \
+              Denethor_R183_HV1840_Th200 Waveform_Galadriel_R157_Ev9 \
+              Waveform_Galadriel_R157_Ev36 Galadriel_R157_Th000_hists1 Galadriel_R157_Th000_hists2
 PNG_FILES = $(addsuffix .png,$(PNG_FILES_0)) # add .png suffix
 
 EPS_FILES_0 = 
 EPS_FILES = $(addsuffix .eps,$(EPS_FILES_0)) # add .eps suffix
 
-PDF_FILES_0 = 
-
+PDF_FILES_0 = plot_Arwen_HVscan plot_Denethor_HVscan
 PDF_FILES = $(addsuffix .pdf,$(PDF_FILES_0)) # add .pdf suffix
 
-C_FILES_0 = Vectors Vectors2 AnglesCMLab
+C_FILES_0 = plot_Denethor_HVscan
 C_FILES = $(addsuffix .C,$(C_FILES_0)) # add .C suffix
 
 
