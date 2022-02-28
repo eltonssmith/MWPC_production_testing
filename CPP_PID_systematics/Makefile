@@ -34,7 +34,7 @@
 TEX_FILES_0 = CPP_PID_systematics
 TEX_FILES = $(addsuffix .tex,$(TEX_FILES_0)) # add .tex suffix
 
-PNG_FILES_0 = cpp_systematics_lpi025_lmu005_c1 cpp_systematics_lpi025_lmu005_c2 cpp_systematics_lpi025_lmu005_c3 \
+PNG_FILES_0 = Proposal_Table2 toy_systematics_c1 cpp_systematics_lpi025_lmu005_c2 cpp_systematics_lpi025_lmu005_c3 \
               cpp_systematics_lpi025_lmu005_c4
               
 PNG_FILES = $(addsuffix .png,$(PNG_FILES_0)) # add .png suffix
@@ -69,7 +69,7 @@ tar : $(TEX_FILES) $(PNG_FILES) $(EPS_FILES) # tar files; will remove old tar fi
 	cp $(TEX_FILES) CPP_PID_systematics
 #	cp $(EPS_FILES) CPP_PID_systematics
 	cp $(PNG_FILES) CPP_PID_systematics
-	cp $(PDF_FILES) CPP_PID_systematics
+#	cp $(PDF_FILES) CPP_PID_systematics
 #	cp $(C_FILES) CPP_PID_systematics
 	cp CPP_PID_systematics.pdf CPP_PID_systematics
 	cp Makefile CPP_PID_systematics
